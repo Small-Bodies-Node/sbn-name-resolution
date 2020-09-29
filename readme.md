@@ -1,5 +1,9 @@
 # SBN Name Resolution Service
 
+## Deployed Openapi Interface
+
+Go [here](https://catch.astro.umd.edu/name-search/ui/)
+
 ## What's This?
 
 This repo houses scripts and code to build REST API services that enable a user to carry out cross-identification tasks. For example, if you want the official designation for "Halley's Comet" in order to perform a query on some astronomical-data service but do not know it ahead of time, then this service will allow you to perform a "fuzzy word search" (i.e. submit arbitrary text) and receive back candidate matches with meta data describing, e.g., in what domain a particular technical designation would be used.
