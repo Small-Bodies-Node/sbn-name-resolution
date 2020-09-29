@@ -30,8 +30,9 @@ def get_name_search(name: str) -> FLW.Response:
 # BEGIN API
 ###########################################
 
-app = FlaskApp(__name__)
-app.add_api('openapi.yaml')
+
+app = FlaskApp(__name__, options={})
+app.add_api('openapi.yaml', base_path=ENV.BASE_HREF)
 application = app.app
 
 

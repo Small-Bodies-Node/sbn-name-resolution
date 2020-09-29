@@ -1,28 +1,9 @@
 """SSOT FOR ENV VARIABLES"""
 
 import os
-from enum import Enum, auto
 from typing import Optional
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv(), override=True, verbose=True)
-
-
-class EDeploymentTier(Enum):
-    """ Enum possible values of deployment tier """
-    LOCAL = auto()
-    SANDBOX = auto()
-    STAGE = auto()
-    PROD = auto()
-
-
-raw_deployment_tier: Optional[str] = os.getenv("DEPLOYMENT_TIER")
-APP_DEPLOYMENT_TIER: EDeploymentTier = EDeploymentTier.LOCAL
-if raw_deployment_tier == "SANDBOX":
-    APP_DEPLOYMENT_TIER = EDeploymentTier.SANDBOX
-if raw_deployment_tier == "STAGE":
-    APP_DEPLOYMENT_TIER = EDeploymentTier.STAGE
-if raw_deployment_tier == "PROD":
-    APP_DEPLOYMENT_TIER = EDeploymentTier.PROD
 
 
 class ENV():
@@ -34,16 +15,13 @@ class ENV():
     DB_USERNAME: Optional[str] = os.getenv("DB_USERNAME")
     DB_PASSWORD: Optional[str] = os.getenv("DB_PASSWORD")
     DB_DATABASE: Optional[str] = os.getenv("DB_DATABASE")
+    BASE_HREF: Optional[str] = os.getenv("BASE_HREF")
 
     # Numeric properties
     LIVE_GUNICORN_INSTANCES: int = int(
         os.getenv("LIVE_GUNICORN_INSTANCES") or -1)
-
     API_PORT: int = int(
         os.getenv("API_PORT") or 5004)
-
-    # ENUM Properties
-    DEPLOYMENT_TIER: EDeploymentTier = APP_DEPLOYMENT_TIER
 
     # Boolean Properties
     IS_DAEMON: bool = os.getenv("IS_DAEMON") == 'TRUE'
