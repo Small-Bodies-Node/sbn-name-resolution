@@ -1,27 +1,27 @@
-# Python-VSCode Template Project "2020"
+# SBN Name Resolution Service
 
 ## What's This?
 
-I recently went to start a new python project and discovered that my template from 1-2 years ago was already outdated; seems like you need to create a fresh template project every ~12 months. So this is my 2020 version.
+This repo houses scripts and code to build REST API services that enable a user to carry out cross-identification tasks. For example, if you want the official designation for "Halley's Comet" in order to perform a query on some astronomical-data service but do not know it ahead of time, then this service will allow you to perform a "fuzzy word search" (i.e. submit arbitrary text) and receive back candidate matches with meta data describing, e.g., in what domain a particular technical designation would be used.
 
-## Goals
+## Code Features
 
-- Autoformatting in VSCode
-- Autoformatting in on git commit with same formatting rules
-- Types enforced
-- Intellisense
-- Keep extensions, packages, config files, etc. to a minimum!
+- PostgresDB
+- Flask API layer
+- Connexion used to generate swagger interface
+- Gunicorn/Apache used for producton deployment
 
-## Steps Taken
+## Live Site
 
-- `source _init_setup.sh`. This created and activated the venv
-- Install the main MS-supported python extension `ms-python.python`
-- Add `"python.pythonPath": ".venv/bin/python"` to `.vscode/settings.json`
-- `pip install mypy`. This does not enable type warnings/errors in vscode, but does let you run `mypy src/main.py` and get warnings/errors printed to terminal.
-- Add ` "python.linting.mypyEnabled": true` to `.vscode/settings.json`; now we get type warnings/erros in vscode!
-- Intellisense is now working; at first I was inundated with snippet suggestions, but then I disabled the extension `frhtylcn.pythonsnippets`, and now I can see the intellisense suggestions no problem. Note: I could also add `"editor.snippetSuggestions": "none"` to `settings.json`, but then that undermines the whole point of that extension; hurray for one less extension!
-- To get the pesky pylint name-spelling rules, etc., you need to install `pip install pylint` and add `"python.linting.pylintEnabled": true` to your `settings.json` file.
+## Development
 
-## Conclusion
+- The codebase is operated using bash scripts that begin with the `\_` underscore character
+- Clone the repo locally: `git clone XXX YYY; cd YYY`
+- Run `cp .env-template .env` and edit the variables therein
+- Always begin by `source _init_setup.sh`. This will:
+  - Create/activate a python virtual environment
+  - Install dependencies to virtual env
+  - Make available to your shell the variables `.env`
+- Run `./_dev_servers` to start the development servers locally; you can then view the swagger interface at `XXX`
 
-Things have improved a lot in VSCode! It feels a lot more 'out of the box' to get all the code-tools up and running.
+## TODOs

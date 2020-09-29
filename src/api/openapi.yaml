@@ -1,0 +1,58 @@
+openapi: 3.0.0
+servers:
+  - url: http://localhost:5004/
+info:
+  title: SBN NAME RESOLUTION SERVICE
+  version: "0.1"
+  description: This is the API for resolving names of astronomical objects. Provided by the Small Bodies Node at the University of Maryland.
+paths:
+  /name:
+    get:
+      tags:
+        - Name Search
+      operationId: app.get_name_search
+      summary: Search for astronomical object designations
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+            pattern: "^[a-zA-Z0-9]*$"
+      responses:
+        "200":
+          description: Return name-search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NameResult"
+components:
+  schemas:
+    NameResult:
+      type: object
+      properties:
+        body_type:
+          type: string
+          description: Comet, asteroid, interstellar object, or unknown
+          example: comet
+          minLength: 1
+          maxLength: 30
+          readOnly: true
+        comparison_text:
+          type: string
+          description: Used in DB for matching algorithm
+          example: 65P/Gunn
+          minLength: 1
+          readOnly: true
+        display_text:
+          type: string
+          description: Text to be shown in front end
+          example: 65P/Gunn
+          minLength: 1
+          readOnly: true
+        target:
+          type: string
+          description: Exact text needed for JPL apis
+          example: 65P
+          readOnly: true

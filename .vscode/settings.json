@@ -1,5 +1,30 @@
 {
+  //
+  // This all needs cleaning up!
+  //
+  "editor.tabSize": 4,
   "python.pythonPath": ".venv/bin/python",
+  "python.envFile": "${workspaceRoot}/.env",
+  "python.linting.enabled": true,
   "python.linting.mypyEnabled": true,
-  "python.linting.pylintEnabled": true
+  "python.linting.pylintEnabled": true,
+  "python.languageServer": "Pylance",
+  "python.analysis.extraPaths": [
+    "src",
+    "src/nameSearchBuild",
+    "src/services",
+    "src/models",
+    "src/api"
+  ]
+  //
+  //   "python.analysis.typeCheckingMode": "basic",
+  //
+  //   "editor.defaultFormatter": "ms-python.vscode-pylance"
+  //
+  /*   "python.formatting.autopep8Args": [
+    "--max-line-length",
+    "20",
+    "--experimental",
+    "--aggressive"
+  ] */
 }
