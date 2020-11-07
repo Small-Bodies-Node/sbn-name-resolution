@@ -6,6 +6,7 @@ Entry point to Flask-Connexion API
 from typing import Dict
 from connexion import FlaskApp
 from flask import wrappers as FLW, jsonify
+from flask_cors import CORS
 from env import ENV
 from services import database_provider
 from services.name_search import name_search
@@ -33,6 +34,7 @@ def get_name_search(name: str) -> FLW.Response:
 
 app = FlaskApp(__name__, options={})
 app.add_api('openapi.yaml', base_path=ENV.BASE_HREF)
+CORS(app.app)
 application = app.app
 
 
