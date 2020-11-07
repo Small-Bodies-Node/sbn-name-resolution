@@ -17,7 +17,7 @@ paths:
           in: query
           schema:
             type: string
-            pattern: "^[a-zA-Z0-9]*$"
+            # pattern: "^[a-zA-Z0-9]*$"
       responses:
         "200":
           description: Return name-search results

@@ -2,7 +2,6 @@
 Entry point to Flask-Connexion API
 """
 
-
 from typing import Dict
 from connexion import FlaskApp
 from flask import wrappers as FLW, jsonify
