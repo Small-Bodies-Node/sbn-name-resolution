@@ -2,18 +2,18 @@
 
 ### 0. Load vars defined in .env
 if [ ! -f $PWD/.env ]; then
-    echo "No .env file found!!!"
+    echo -e "No .env file found!!!"
     return 1
 fi
 source .env
 
 ### 1. Message user
 clear
-echo """${GRE}
-=======================================================
-        Initializing Python Virtual Environment
-=======================================================
- ${WHI}"""
+echo -e """${GRE}
+=======================================
+Initializing Python Virtual Environment
+=======================================
+${WHI}"""
 
 sleep 1
 
@@ -24,7 +24,7 @@ find . -type d ! -path './.venv/*' -name '.mypy_cache' -exec rm -rf {} +
 
 ### 3. Check for existence of `.venv` dir
 if [[ ! -d $PWD/.venv ]]; then
-    echo """${BLU}
+    echo -e """${BLU}
     virtual Environment Not Found -- Creating '.venv'
 """
     $PYTHON_3_5_OR_HIGHER -m venv .venv
@@ -42,7 +42,7 @@ pip install -q -r requirements.txt
 ln -fs $PWD/_precommit_hook $PWD/.git/hooks/pre-commit
 
 ### 7. Final Message
-echo """${BLU}
+echo -e """${BLU}
     Done. Bon courage!
 ${WHI}
 """
