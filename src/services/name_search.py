@@ -5,6 +5,7 @@
 from typing import List
 from .database_provider import data_provider_session, Session, db_engine
 from models.name_search import base
+from env import ENV
 
 
 # Create NameSearch table if not exists; make db aware of this model
@@ -40,7 +41,7 @@ def name_search(search_submission: str) -> List:
                 PREPARE nameSearchPlan (text) AS
                     SELECT * FROM name_search
                     ORDER BY (name_search.comparison_text <-> $1)
-                    LIMIT 10;
+                    LIMIT '{ENV.MAX_RESULTS}';
                 -- EXECUTE fooplan('{search_submission}');
             """
         )

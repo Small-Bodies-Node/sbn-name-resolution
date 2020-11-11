@@ -22,6 +22,8 @@ class ENV():
         os.getenv("LIVE_GUNICORN_INSTANCES") or -1)
     API_PORT: int = int(
         os.getenv("API_PORT") or 5004)
+    MAX_RESULTS: int = int(
+        os.getenv("MAX_RESULTS") or 15)
 
     # Boolean Properties
     IS_DAEMON: bool = os.getenv("IS_DAEMON") == 'TRUE'
