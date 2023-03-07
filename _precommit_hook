@@ -8,7 +8,7 @@ echo '''
 
 '''
 
-if [ $DONT_FORMAT_ON_CODE_COMMIT ]; then
+if [ true ]; then
     echo """
         Skipping auto-format!!!
     """
