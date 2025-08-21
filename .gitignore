@@ -1,4 +1,5 @@
 ### Misc
+.DS_Store
 .env
 .venv/**/*
 notes.md
@@ -13,3 +14,4 @@ _temp
 
 ### Data downloaded from Minor Planet Center
 **/mpcdata/*
+mpcdata--**

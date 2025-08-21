@@ -20,18 +20,21 @@ class TargetTypePatterns:
         # allow fragments like 73P-B
         # First check for 99P/2030 A2, then P/2030 A2
         # This avoids nonsense like 32C/Asdf
-        (r'(^([1-9][0-9]*[PD]({frag})?((?=/)|(?!\S))))'
-         # r'|(/(({temp}({frag})?)))?)|({name})'
-         r'|(^[PDCX]/{temp}({frag})?)'
-         ).format(frag=cometary_fragment, temp=temporary_designation)
+        (
+            r'(^([1-9][0-9]*[PD]({frag})?((?=/)|(?!\S))))'
+            # r'|(/(({temp}({frag})?)))?)|({name})'
+            r'|(^[PDCX]/{temp}({frag})?)'
+        ).format(frag=cometary_fragment, temp=temporary_designation)
     )
 
     asteroidal: Pattern = re.compile(
-        (r'(^{temp})'  # 2019 DQ123
-         r'|(^\([1-9][0-9]*\))'  # (1234)
-         r'|(^[1-9][0-9]*\b(?!\S))'  # 1234
-         r'|(^A/{temp})'  # A/2019 Q1
-         ).format(temp=temporary_designation)
+        (
+            r'(^{temp})'  # 2019 DQ123
+            r'|(^\([1-9][0-9]*\))'  # (1234)
+            r'|(^[1-9][0-9]*\b(?!\S))'  # 1234
+            r'|(^A[1-9][0-9]* [A-Z]{2}\\b(?!\\S))'  # A1234 AB ### Added by DWD
+            r'|(^A/{temp})'  # A/2019 Q1
+        ).format(temp=temporary_designation)
     )
 
     interstellar_object: Pattern = re.compile(
