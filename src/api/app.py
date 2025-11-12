@@ -31,10 +31,19 @@ def get_name_search(name: str) -> FLW.Response:
 ###########################################
 
 
-app = FlaskApp(__name__, options={})
-app.add_api('openapi.yaml', base_path=ENV.BASE_HREF)
+app = FlaskApp(__name__)
+# app.add_api('openapi.yaml', base_path=ENV.BASE_HREF)
+app.add_api('openapi.yaml')
 CORS(app.app)
 application = app.app
+
+
+@application.get('/hello')
+def hello_world() -> FLW.Response:
+    """Simple route to confirm server is alive"""
+    response = jsonify({"message": "hello"})
+    response.status_code = 200
+    return response
 
 
 @application.teardown_appcontext
@@ -44,4 +53,4 @@ def shutdown_session(exception: Exception = None) -> None:
 
 
 if __name__ == '__main__':
-    app.run(port=ENV.API_PORT, use_reloader=False, threaded=False)
+    app.run(port=ENV.API_PORT)

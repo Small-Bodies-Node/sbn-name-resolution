@@ -35,7 +35,7 @@ session: sqSession.Session = Session()
 ########################################
 
 
-def uploadNameSearchInstancesToDB() -> None:
+def uploadNameSearchInstancesToDB(skip_interval: int = 100) -> None:
 
     ################################################################
     # Import search-name data from csv file created in earlier stage
@@ -62,8 +62,14 @@ def uploadNameSearchInstancesToDB() -> None:
                 # Note: Header line will be rejected
                 print('Rejected >>> '+str(parts) + '<<<')
 
+    total_items = len(name_search_items)
+    if skip_interval <= 0:
+        raise ValueError("skip_interval must be a positive integer")
+    if total_items:
+        print(f">>> 0/{total_items} (0.0%)")
+
     isUpserting = 1  # Toggle between upsert behavior and simple-upload
-    for item in name_search_items:
+    for index, item in enumerate(name_search_items, start=1):
         if isUpserting:
             # Use this for simple insertion; conflicts cause errors
             stmt: dml.Insert = insert(NameSearch).values(
@@ -86,6 +92,12 @@ def uploadNameSearchInstancesToDB() -> None:
             session.execute(stmt3)
         else:
             session.add(item)
+        if index % skip_interval == 0:
+            percent_complete = (index / total_items) * 100
+            print(f">>> {index}/{total_items} ({percent_complete:.1f}%)")
+
+    if total_items and total_items % skip_interval != 0:
+        print(f">>> {total_items}/{total_items} (100.0%)")
 
     # Try committing changes; rollback on error
     try:

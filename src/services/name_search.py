@@ -3,6 +3,7 @@
 """
 
 from typing import List
+from sqlalchemy import text
 from .database_provider import data_provider_session, Session, db_engine
 from models.name_search import base
 from env import ENV
@@ -22,46 +23,20 @@ def name_search(search_submission: str) -> List:
 
     session: Session
     with data_provider_session() as session:
-
-        q = session.execute(
-
-            #
-            # Injection-prone query:
-            #
-            # f"""
-            #     SELECT target_text, search_text, body_type FROM name_search
-            #     ORDER BY (search_text <-> '{search_submission}')
-            #     LIMIT 10;
-            # """
-
-            #
-            # Injection-safe query preparation:
-            #
-            f"""
-                PREPARE nameSearchPlan (text) AS
-                    SELECT * FROM name_search
-                    ORDER BY (name_search.comparison_text <-> $1)
-                    LIMIT '{ENV.MAX_RESULTS}';
-                -- EXECUTE fooplan('{search_submission}');
+        stmt = text(
+            """
+            SELECT target, comparison_text, display_text, body_type
+            FROM name_search
+            ORDER BY (name_search.comparison_text <-> :search_submission)
+            LIMIT :limit
             """
         )
-
         r = session.execute(
-            #
-            # Injection-safe query execution:
-            #
-            f"""
-                EXECUTE nameSearchPlan('{search_submission}');
-            """
-        )
-
-        s = session.execute(
-            #
-            # Injection-safe query ridiculous final step:
-            #
-            f"""
-                DEALLOCATE nameSearchPlan;
-            """
+            stmt,
+            {
+                "search_submission": search_submission,
+                "limit": ENV.MAX_RESULTS,
+            },
         )
 
         # print("<><><><><>")
@@ -69,10 +44,10 @@ def name_search(search_submission: str) -> List:
             # print(p)
             found_names.append(
                 {
-                    "target": p[0],
-                    "comparison_text": p[1],
-                    "display_text": p[2],
-                    "body_type": p[3],
+                    "target": p.target,
+                    "comparison_text": p.comparison_text,
+                    "display_text": p.display_text,
+                    "body_type": p.body_type,
                 }
             )
 

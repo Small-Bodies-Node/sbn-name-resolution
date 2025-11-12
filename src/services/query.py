@@ -32,7 +32,7 @@ class TargetTypePatterns:
             r'(^{temp})'  # 2019 DQ123
             r'|(^\([1-9][0-9]*\))'  # (1234)
             r'|(^[1-9][0-9]*\b(?!\S))'  # 1234
-            r'|(^A[1-9][0-9]* [A-Z]{2}\\b(?!\\S))'  # A1234 AB ### Added by DWD
+            r'|(^A[1-9][0-9]* [A-Z]{{2}}\\b(?!\\S))'  # A1234 AB ### Added by DWD
             r'|(^A/{temp})'  # A/2019 Q1
         ).format(temp=temporary_designation)
     )

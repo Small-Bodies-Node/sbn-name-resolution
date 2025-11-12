@@ -58,4 +58,8 @@ The following steps are needed to set up the code base whatever aspect you want 
 
 A script is supplied called `_gunicorn_manager` that takes the arguments `start|stop|status|restart` to launch the app as a background process with the gunicorn WSGI server for production serving. The number of workers is controlled with the env variable `LIVE_GUNICORN_INSTANCES`. If you have trouble getting gunicorn to work, you can run the manager with 0 as the 2nd argument to start it off in non-daemon mode.
 
-It is recommended that you make the gunicorn-powered server accesible to the outside world by proxy-passing requests through an https-enabled web server like apache. Contact me if you need assistance setting that up.
+### Connexion 3, Uvicorn, and async readiness
+
+The API now runs on Connexion 3, which exposes an ASGI application. To support that, the gunicorn manager launches `uvicorn.workers.UvicornWorker` instances instead of classic WSGI workers. Each gunicorn worker process embeds a Uvicorn event loop. Synchronous Flask handlers still run exactly as before (each worker behaves like a single blocking Python thread), but whenever you `await` inside a handler, the event loop offloads the async task and continues serving other requests—very similar to Node.js’s event-loop model. In short: gunicorn still supervises `N` worker processes, but each one is powered by Uvicorn so the stack is ready for modern async web development whenever we choose to adopt it.
+
+It is recommended that you make the gunicorn-powered server accesible to the outside world by proxy-passing requests through an https-enabled web server like apache.
