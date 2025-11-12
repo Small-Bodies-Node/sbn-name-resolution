@@ -7,8 +7,11 @@
 import multiprocessing
 from env import ENV
 
-workers: int = ENV.LIVE_GUNICORN_INSTANCES
+
+def _auto_worker_count() -> int:
+    count = multiprocessing.cpu_count() or 1
+    return count
 
 
-if ENV.LIVE_GUNICORN_INSTANCES == -1:
-    workers = multiprocessing.cpu_count() * 2
+configured_workers = ENV.LIVE_GUNICORN_INSTANCES
+workers: int = configured_workers if configured_workers > 0 else _auto_worker_count()

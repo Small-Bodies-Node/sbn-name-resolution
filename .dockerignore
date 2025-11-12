@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.git
+.gitignore
+mpcdata*/
+mpcdata
+mpcdata--*
+uv.lock.bak
+notes.md

@@ -1,49 +1,21 @@
 # SBN Name Resolution Service
 
-## Deployed Openapi Interface
-
-Go [here](https://catch.astro.umd.edu/name-search/ui/)
-
 ## What's This?
 
-This repo houses scripts and code to build REST API services that enable a user to carry out cross-identification tasks. For example, if you want the official designation for "Halley's Comet" in order to perform a query on some astronomical-data service but do not know it ahead of time, then this service will allow you to perform a "fuzzy word search" (i.e. submit arbitrary text) and receive back candidate matches with meta data describing, e.g., in what domain a particular technical designation would be used.
+This is a REST API to preform a "fuzzy word search" for comet/astroid names (i.e. submit arbitrary text) and receive back candidate matches with meta data describing, e.g., in what domain a particular technical designation would be used.
 
 ## Code Features
 
 - PostgresDB
 - Flask API layer
 - Connexion used to generate swagger interface
-- Gunicorn/Apache used for production deployment
+- Gunicorn/Docker used for production deployment
 
 ## Development
 
-### Common Steps
-
-This repo has code for:
-
-- Building the indexed postgresdb
-- Running a flask-connexion API
-- Testing
-
-The following steps are needed to set up the code base whatever aspect you want to work on:
-
-- The codebase is operated using bash scripts that begin with the `\_` underscore character
-- Prerequisites for local development:
-  - Running postgresql server with credentials to read/write
-  - python (& pip) v3.5+
-- Clone the repo locally:
-  ```
-      git clone https://github.com/Small-Bodies-Node/sbn-name-resolution
-      cd sbn-name-resolution
-  ```
-- Run `cp .env-template .env` and edit the variables therein
-- Always begin by `source _init_setup.sh`. This will:
-  - Create/activate a python virtual environment
-  - Install dependencies to virtual env
-  - Make available to your shell the variables `.env`
-
 ### Name-Search-Build
 
+- Before the REST APIs will work, you need to set up the PostgreSQL database with the indexed tables, and populate them with data that we get by downloading the latest files from the MPC.
 - To build the indexed tables in your postgresql database, you need to to have the `pg_trgm` extension made available to your system.
   - If you are on a Mac, then the postgresql installed via homebrew will have this already available
   - If youre on linux, then you'll need to have the `postgresql-contrib` installed
@@ -54,9 +26,15 @@ The following steps are needed to set up the code base whatever aspect you want 
 
 - If you have nodemon globally installed, then you can develop your api code and have it automatically update on changes by running `_develop_apis`. Otherwise, just run `python src/api/app.py`
 
-## Deployment
+### Docker
 
-A script is supplied called `_gunicorn_manager` that takes the arguments `start|stop|status|restart` to launch the app as a background process with the gunicorn WSGI server for production serving. The number of workers is controlled with the env variable `LIVE_GUNICORN_INSTANCES`. If you have trouble getting gunicorn to work, you can run the manager with 0 as the 2nd argument to start it off in non-daemon mode.
+The repo ships with a `Dockerfile` (Python 3.13 slim) and `docker-compose.yml` for running the API in a container in production mode:
+
+1. Ensure your `.env` file contains a valid `API_PORT` (the container no longer sets a default) and any other runtime settings expected by the app.
+2. Build and run with `docker compose up --build`.
+3. The compose service uses `restart: unless-stopped`, loads the `.env`, and publishes the container port so `${API_PORT}` inside the container is exposed on the same port on the host.
+
+All application dependencies are synced via `uv sync --frozen --no-dev --no-install-project` during the image build so the runtime matches the exact versions pinned in `uv.lock`.
 
 ### Connexion 3, Uvicorn, and async readiness
 

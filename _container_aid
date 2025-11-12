@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SERVICE=${1:-app}
+
+echo "Starting interactive shell in docker compose service '${SERVICE}'"
+echo "Hint: run 'exit' when you're done."
+
+exec docker compose run --rm --service-ports --entrypoint /bin/bash "${SERVICE}"

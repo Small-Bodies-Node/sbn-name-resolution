@@ -1,0 +1,11 @@
+services:
+  app:
+    build:
+      context: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - API_PORT=${API_PORT}
+    ports:
+      - "${API_PORT}:${API_PORT}"

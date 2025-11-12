@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -z "${API_PORT:-}" ]]; then
+    echo "API_PORT is not set; please export it (e.g. via .env) before starting."
+    exit 1
+fi
+
+PORT="${API_PORT}"
+
+echo "Starting gunicorn on port ${PORT} (worker count via .gunicorn.config.py)"
+
+exec gunicorn src.api.app:app \
+    --worker-class uvicorn.workers.UvicornWorker \
+    --config .gunicorn.config.py \
+    --bind "0.0.0.0:${PORT}"
